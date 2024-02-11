@@ -1,6 +1,6 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import AuthProvider, { useAuth } from './security/AuthContext'
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useAuth } from './security/AuthContext'
 
 import LogoutComponent from "./LogoutComponent";
 import HeaderComponent from "./HeaderComponent";
