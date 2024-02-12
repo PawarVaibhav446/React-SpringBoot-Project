@@ -11,3 +11,4 @@ export const retrieveHelloWorldBean
 
 export const retrieveHelloWorldPathVariable
     = (username) => apiClient.get(`/hello-world/path-variable/${username}`)
+
