@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { deleteTodoById, retrieveAllTodosByUsername } from "./api/TodoApiService";
+import { useAuth } from "./security/AuthContext";
 
 export default function ListTodosComponent() {
 
-    const today = new Date()
-    const targetDate = new Date(today.getFullYear() + 12, today.getMonth(), today.getDay())
-
     const [todos, setTodos] = useState([])
     const [message, setMessage] = useState(null)
+
+    const authContext = useAuth()
+
+    const username = authContext.username
 
     useEffect(
         () => refreshTodos(), []
     )
 
     function refreshTodos() {
-        retrieveAllTodosByUsername('Vaibhav')
+        retrieveAllTodosByUsername(username)
             .then(response => {
                 setTodos(response.data)
             })
@@ -23,7 +25,7 @@ export default function ListTodosComponent() {
 
     function deleteTodo(id) {
         console.log('clicked ' + id)
-        deleteTodoById('Vaibhav', id)
+        deleteTodoById(username, id)
             .then(
                 () => {
                     setMessage(`Delete of todo with id = ${id} successful`)
@@ -37,6 +39,7 @@ export default function ListTodosComponent() {
     return (
         <div className="container">
             <h1>Things You Want to do !!!</h1>
+            {message && <div className="alert alert-warning">{message}</div>}
             <div>
                 <table className="table">
                     <thead>
@@ -44,6 +47,7 @@ export default function ListTodosComponent() {
                             <th>description</th>
                             <th>Done?</th>
                             <th>Target Date</th>
+                            <th>Delete</th>
                         </tr>
                     </thead>
                     <tbody>
