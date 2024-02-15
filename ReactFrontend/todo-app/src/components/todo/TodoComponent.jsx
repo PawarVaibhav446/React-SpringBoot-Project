@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 
-import { useParams } from 'react-router-dom'
+import { useParams , useNavigate} from 'react-router-dom'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 
-import { retrieveTodoApi } from "./api/TodoApiService";
+import { retrieveTodoApi, updateTodoByUsername } from "./api/TodoApiService";
 import { useAuth } from "./security/AuthContext";
 
 export default function TodoComponent() {
@@ -12,6 +12,7 @@ export default function TodoComponent() {
 
     const authContext = useAuth()
     const username = authContext.username
+    const navigate = useNavigate()
 
     const [description, setDescription] = useState()
     const [targetDate, setTargetDate] = useState('')
@@ -32,6 +33,20 @@ export default function TodoComponent() {
 
     function onSubmit(values) {
         console.log(values)
+
+        const todo = {
+            id: id,
+            username: username,
+            description: values.description,
+            targetDate: values.targetDate,
+            done: false
+        }
+
+        updateTodoByUsername(username, id, todo)
+            .then(response => {
+                navigate('/todos')
+            })
+            .catch(error => console.log(error))
     }
 
     function validate(values) {
@@ -40,11 +55,11 @@ export default function TodoComponent() {
             // targetDate: 'Enter a valid target date'
         }
 
-        if(values.description.length < 5) {
+        if (values.description.length < 5) {
             errors.description = 'Enter atleast 5 characters'
         }
 
-        if(values.targetDate == null) {
+        if (values.targetDate == null) {
             errors.targetDate = 'Enter a target date'
         }
 
@@ -80,13 +95,13 @@ export default function TodoComponent() {
 
                                 <fieldset className="form-group">
                                     <label>Description</label>
-                                    <Field type="text" className="form-control" 
-                                    name="description" />
+                                    <Field type="text" className="form-control"
+                                        name="description" />
                                 </fieldset>
                                 <fieldset className="form-group">
                                     <label>Target Date</label>
-                                    <Field type="date" className="form-control" 
-                                    name="targetDate" />
+                                    <Field type="date" className="form-control"
+                                        name="targetDate" />
                                 </fieldset>
                                 <div>
                                     <button className="btn btn-success m-5" type="submit">Save</button>
