@@ -80,8 +80,8 @@ export default function ListTodosComponent() {
                         ))}
                     </tbody>
                 </table>
-                <div className="btn btn-success m-5" onClick={addNewTodo}>Add New Todo</div>
             </div>
+            <div className="btn btn-success m-5" onClick={addNewTodo}>Add New Todo</div>
         </div>
     );
 }
